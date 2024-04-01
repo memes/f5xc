@@ -1,0 +1,7 @@
+# Ignore my direnv setup
+.envrc
+.direnv
+.tool-versions
+
+# Ignore generated Gorelease binaries
+dist/
