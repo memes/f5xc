@@ -7,7 +7,8 @@ name: go-lint
 on:
   pull_request:
   push:
-    branches: [main]
+    branches-ignore:
+      - main
 
 permissions:
   contents: read
@@ -15,8 +16,6 @@ permissions:
 
 jobs:
   go-mod-tidy:
-    # TODO: @memes - enable in real go project
-    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -29,8 +28,6 @@ jobs:
       - name: Verify go.mod and go.sum are up to date
         run: go mod tidy && git diff --exit-code -- go.mod go.sum
   golangci-lint:
-    # TODO: @memes - enable in real go project
-    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -45,8 +42,6 @@ jobs:
         with:
           version: latest
   go-test:
-    # TODO: @memes - enable in real go project
-    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
