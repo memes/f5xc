@@ -11,4 +11,36 @@ fileignoreconfig:
 - filename: README.md
   ignore_detectors:
   - filecontent
+- filename: testdata/ca.pem
+  checksum: 8bb8afb0e2fb87035eb62cae6499e72b530032aff562b428ca79296c1208332c
+  ignore_detectors:
+  - filecontent
+- filename: testdata/test-user-key.pem
+  checksum: d8a1f9495335d4fab4ad7b7885d9ece48fe61a18a6925e6c48f18f792080156a
+  ignore_detectors:
+  - filecontent
+- filename: testdata/test-user.pem
+  checksum: 66e58a555d0443918f3ddfe949365e2a86664fb08979cf93ecccf3693b99b61f
+  ignore_detectors:
+  - filecontent
+- filename: blindfold/blindfold.go
+  checksum: cec8122f6ece311c123599f5cdc468039f0b77be3050972d27487f21a8892162
+- filename: go.sum
+  checksum: feaefc13f890541d6f985e9dafd427809892a4df8935520b76f13868ca6125ac
+- filename: public_key.go
+  checksum: 29c5a97d0b576a1a31c9cd4bbe644d2c2c4ba3aa268b31cbb3bda150d5fdeea7
+- filename: public_key_test.go
+  checksum: 3683e73514b171efc882e8549a1a8e852fdb82e68d461448db2c306317570397
+- filename: policy_document_test.go
+  checksum: dcc1b637243299887a2b249b9129d66797dc903b365bb65a5ac70fde74aa953d
+- filename: testdata/Makefile
+  checksum: c0a4c898889223aeab0caaf3365648100a0fa99ae3adbbc0f101120c1183eba4
+- filename: blindfold/blindfold_test.go
+  checksum: b016e6fe618667902399e200cf065828beb47f20fe13830c6ecdb3f17b715c96
+- filename: client_test.go
+  checksum: 8ab504c43d179ed11eabfa6dd2efebfe2d5bfad38b54c4a4f4678f86babfe1e8
+- filename: policy_document.go
+  checksum: ec9e7ebd5c72a8a6aa181aa42eb969bebc6281596faa7ea6fe127cb990a480f8
+- filename: client.go
+  checksum: f39a07571ef7be25116d05594695e9f25adc07f0d74653164d75478f83b6b5d3
 version: "1.0"
