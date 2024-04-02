@@ -1,5 +1,6 @@
 # These github actions will perform linting and go tests
 # spell-checker: disable
+# yamllint disable rule:line-length
 ---
 name: go-lint
 
@@ -46,6 +47,11 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+      - name: Download vesctl
+        run: |
+          curl -sfL https://vesio.azureedge.net/releases/vesctl/0.2.47/vesctl.linux-amd64.gz | sudo zcat > /usr/local/bin/vesctl
+          sudo chmod 0755 /usr/local/bin/vesctl
+          sudo chown root:root /usr/local/bin/vesctl
       - name: Setup go
         uses: actions/setup-go@v5
         with:

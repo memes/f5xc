@@ -5,3 +5,8 @@
 
 # Ignore generated Gorelease binaries
 dist/
+
+# Don't commit testing CSRs or intermediary JSON
+testdata/*.json
+testdata/*.csr
+testdata/ca-key.pem
