@@ -24,7 +24,7 @@ fileignoreconfig:
   ignore_detectors:
   - filecontent
 - filename: blindfold/blindfold.go
-  checksum: cec8122f6ece311c123599f5cdc468039f0b77be3050972d27487f21a8892162
+  checksum: 9faa562c54a78c595c2a5f342612667cc336e8516f25eb14dd46af87f4691934
 - filename: go.sum
   checksum: feaefc13f890541d6f985e9dafd427809892a4df8935520b76f13868ca6125ac
 - filename: public_key.go
@@ -36,7 +36,7 @@ fileignoreconfig:
 - filename: testdata/Makefile
   checksum: c0a4c898889223aeab0caaf3365648100a0fa99ae3adbbc0f101120c1183eba4
 - filename: blindfold/blindfold_test.go
-  checksum: b016e6fe618667902399e200cf065828beb47f20fe13830c6ecdb3f17b715c96
+  checksum: 25470f65b1721d3c3385eaa70c7c77924ca7cbfd5469fdfe3e4e7d4d208188df
 - filename: client_test.go
   checksum: 8ab504c43d179ed11eabfa6dd2efebfe2d5bfad38b54c4a4f4678f86babfe1e8
 - filename: policy_document.go
