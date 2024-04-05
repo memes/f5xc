@@ -19,5 +19,9 @@
     ],
     "flagWords": [
         "hte"
+    ],
+    "ignorePaths": [
+        "blindfold/testdata/**",
+        "testdata/**"
     ]
 }
