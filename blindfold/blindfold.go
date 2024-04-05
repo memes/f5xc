@@ -20,7 +20,8 @@ import (
 // The default name to use when searching for vesctl.
 const VesctlExecutable = "vesctl"
 
-// ErrVesctl indicates that vesctl process failed or exited with status code other than 0.
+// ErrVesctl indicates that vesctl process failed or exited with status code other than 0. It will usually contain a
+// wrapped error with specifics.
 var ErrVesctl = errors.New("failed to execute vesctl")
 
 // Finds the vesctl binary matching name in system paths, or returns an error. The name parameter can be left empty to
@@ -112,10 +113,60 @@ func ExecuteVesctl(ctx context.Context, vesctl string, args []string, params map
 
 // Executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument, returning the
 // Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to vesctl, and will
-// create an execution environment that overrides the values of common VOLT_*, VES_*, and VOLTERRA_* with invalid values
-// to avoid leaking data.
-func Blindfold(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
+// use an execution environment that avoids avoid leaking data.
+func Seal(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
 	logger := slog.With("vesctl", vesctl)
+	logger.Debug("Preparing to blindfold data")
+
+	// Create a temporary directory where the plaintext data will be written; the temp dir will be cleaned up when
+	// the function exits. Any error will cause the function to exit even if the underlying condition is recoverable.
+	tmpDir, err := os.MkdirTemp("", "")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create temporary directory: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	plaintextFile, err := os.CreateTemp(tmpDir, "blindfold")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create plaintext file: %w", err)
+	}
+	if _, err = plaintextFile.Write(plaintext); err != nil {
+		_ = plaintextFile.Close()
+		return nil, fmt.Errorf("failed to write plaintext file: %w", err)
+	}
+	if err = plaintextFile.Close(); err != nil {
+		return nil, fmt.Errorf("failed to close plaintext file: %w", err)
+	}
+
+	return SealFile(ctx, vesctl, plaintextFile.Name(), pubKey, policyDoc)
+}
+
+// Helper function to marshal an object to an Envelope and write to a temp file.
+// It is the callers responsibility to clean-up the temporary file.
+func createTempYAMLEnvelope[T f5xc.EnvelopeAllowed](obj T, tmpDir string) (string, error) {
+	f, err := os.CreateTemp(tmpDir, "blindfold")
+	if err != nil {
+		return "", fmt.Errorf("failed to create temp file: %w", err)
+	}
+	defer f.Close()
+	data, err := yaml.Marshal(f5xc.Envelope[T]{Data: obj})
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal to YAML: %w", err)
+	}
+	if _, err = f.Write(data); err != nil {
+		return "", fmt.Errorf("failed to write data to file: %w", err)
+	}
+	if err := f.Close(); err != nil {
+		return "", fmt.Errorf("failed to close file: %w", err)
+	}
+	return f.Name(), nil
+}
+
+// Executes vesctl to blindfold the supplied plaintext file using the supplied PublicKey and PolicyDocument, returning
+// the Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to vesctl, and
+// will use an execution environment that tries to avoid leaking data.
+func SealFile(ctx context.Context, vesctl, plaintextPath string, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
+	logger := slog.With("vesctl", vesctl, "plaintextPath", plaintextPath)
 	logger.Debug("Preparing to blindfold")
 	vesctlPath, err := FindVesctl(vesctl)
 	if err != nil {
@@ -139,21 +190,10 @@ func Blindfold(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5x
 	if err != nil {
 		return nil, fmt.Errorf("failed to write PolicyDocument envelope file: %w", err)
 	}
-	plaintextFile, err := os.CreateTemp(tmpDir, "blindfold")
-	if err != nil {
-		return nil, fmt.Errorf("failed to create plaintext file: %w", err)
-	}
-	if _, err = plaintextFile.Write(plaintext); err != nil {
-		_ = plaintextFile.Close()
-		return nil, fmt.Errorf("failed to write plaintext file: %w", err)
-	}
-	if err = plaintextFile.Close(); err != nil {
-		return nil, fmt.Errorf("failed to close plaintext file: %w", err)
-	}
 
 	var buf bytes.Buffer
 	args := []string{
-		"request", "secrets", "encrypt", plaintextFile.Name(),
+		"request", "secrets", "encrypt", plaintextPath,
 	}
 	params := map[string]string{
 		"--public-key":      pubKeyFile,
@@ -181,25 +221,4 @@ func Blindfold(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5x
 		return nil, fmt.Errorf("failed to scan vesctl output: %w", err)
 	}
 	return data, nil
-}
-
-// Helper function to marshal an object to an Envelope and write to a temp file.
-// It is the callers responsibility to clean-up the temporary file.
-func createTempYAMLEnvelope[T f5xc.EnvelopeAllowed](obj T, tmpDir string) (string, error) {
-	f, err := os.CreateTemp(tmpDir, "blindfold")
-	if err != nil {
-		return "", fmt.Errorf("failed to create temp file: %w", err)
-	}
-	defer f.Close()
-	data, err := yaml.Marshal(f5xc.Envelope[T]{Data: obj})
-	if err != nil {
-		return "", fmt.Errorf("failed to marshal to YAML: %w", err)
-	}
-	if _, err = f.Write(data); err != nil {
-		return "", fmt.Errorf("failed to write data to file: %w", err)
-	}
-	if err := f.Close(); err != nil {
-		return "", fmt.Errorf("failed to close file: %w", err)
-	}
-	return f.Name(), nil
 }
