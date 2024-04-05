@@ -184,6 +184,11 @@ func (t *transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return t.base.RoundTrip(req) //nolint:wrapcheck // It is appropriate to return the http package error as-is
 }
 
+// Implement CloseIdleConnections to ensure that any underlying connections in base transport pool are closed as necessary.
+func (t *transport) CloseIdleConnections() {
+	t.base.CloseIdleConnections()
+}
+
 // Creates a new HTTP client that is pre-configured to authenticate to F5 XC endpoints.
 func NewClient(options ...Option) (*http.Client, error) {
 	cfg := &config{}
