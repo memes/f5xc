@@ -112,6 +112,14 @@ func ExecuteVesctl(ctx context.Context, vesctl string, args []string, params map
 }
 
 // Executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument, returning the
+// Base64 encoded sealed data.
+// Deprecated: Blindfold function exists for backward compatibility with v1.0.x and should not be used in new code; use
+// Seal or SealFile functions instead.
+func Blindfold(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
+	return Seal(ctx, vesctl, plaintext, pubKey, policyDoc)
+}
+
+// Executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument, returning the
 // Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to vesctl, and will
 // use an execution environment that avoids avoid leaking data.
 func Seal(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {

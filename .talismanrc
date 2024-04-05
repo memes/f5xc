@@ -24,7 +24,7 @@ fileignoreconfig:
   ignore_detectors:
   - filecontent
 - filename: blindfold/blindfold.go
-  checksum: 9faa562c54a78c595c2a5f342612667cc336e8516f25eb14dd46af87f4691934
+  checksum: 60fbac3eecbb76f102e061a393ad73b648ddc503e2c4882f0e1d61c18950bc59
 - filename: go.sum
   checksum: feaefc13f890541d6f985e9dafd427809892a4df8935520b76f13868ca6125ac
 - filename: public_key.go
