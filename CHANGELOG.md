@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/memes/f5xc/compare/v1.0.1...v1.1.0) (2024-04-05)
+
+
+### Features
+
+* Renamed Blindfold method, added SealedFile ([78fcf04](https://github.com/memes/f5xc/commit/78fcf04e2d0d899a3435b704022e7b1ab10cc03d))
+
 ## [1.0.1](https://github.com/memes/f5xc/compare/v1.0.0...v1.0.1) (2024-04-02)
 
 
