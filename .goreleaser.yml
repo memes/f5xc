@@ -1,5 +1,6 @@
 # spell-checker: disable
 ---
+version: 2
 project_name: f5xc
 builds:
   - id: unseal
@@ -56,7 +57,7 @@ signs:
 snapshot:
   name_template: "{{ incpatch .Tag }}-next"
 changelog:
-  skip: true
+  disable: true
 dockers:
   - goos: linux
     goarch: amd64
