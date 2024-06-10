@@ -25,7 +25,7 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
       - name: Trigger Go Report update
         if: ${{ steps.release-please.outputs.release_created }}
-        uses: fjogeleit/http-request-action@v1.15.4
+        uses: fjogeleit/http-request-action@v1.16.1
         with:
           url: 'https://goreportcard.com/checks'
           method: 'POST'
