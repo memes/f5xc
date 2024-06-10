@@ -15,11 +15,11 @@ linters:
   enable:
     - asciicheck
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - dupl
     - durationcheck
+    - err113
     - errcheck
     - errorlint
     - exportloopref
@@ -30,7 +30,6 @@ linters:
     - gocyclo
     - godot
     - godox
-    - goerr113
     - gofmt
     - gofumpt
     - goheader
@@ -55,14 +54,12 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck
-    - structcheck
     - stylecheck
     - thelper
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - whitespace
     - wrapcheck
 linters-settings:
@@ -87,24 +84,11 @@ linters-settings:
     check-type-assertions: true
     check-blank: true
   gocritic:
+    # Additional checks in addition to 'stable' checks.
     enabled-checks:
       # Diagnostic
-      - appendAssign
-      - argOrder
-      - badCond
-      - caseOrder
-      - codegenComment
       - commentedOutCode
-      - deprecatedComment
-      - dupArg
-      - dupBranchBody
-      - dupCase
-      - dupSubExpr
-      - exitAfterDefer
-      - flagDeref
-      - flagName
       - nilValReturn
-      - offBy1
       - sloppyReassign
       - weakCond
       - octalLiteral
@@ -118,33 +102,17 @@ linters-settings:
       - rangeValCopy
 
       # Style
-      - assignOp
       - boolExprSimplify
-      - captLocal
-      - commentFormatting
       - commentedOutImport
-      - defaultCaseOrder
       - docStub
-      - elseif
       - emptyFallthrough
       - emptyStringTest
       - hexLiteral
       - methodExprCall
-      - regexpMust
-      - singleCaseSwitch
-      - sloppyLen
       - stringXbytes
-      - switchTrue
       - typeAssertChain
-      - typeSwitchVar
-      - underef
       - unlabelStmt
-      - unlambda
-      - unslice
-      - valSwap
-      - wrapperFunc
       - yodaStyleExpr
-      - ifElseChain
 
       # Opinionated
       - builtinShadow
@@ -161,3 +129,10 @@ linters-settings:
     allow-no-explanation: []
     require-explanation: true
     require-specific: true
+output:
+  formats:
+    - format: tab
+  print-issued-lines: false
+  print-linter-name: true
+  uniq-by-line: false
+  sort-results: true

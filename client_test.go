@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/memes/f5xc"
+	"go.uber.org/goleak"
 	"software.sslmate.com/src/go-pkcs12"
 )
 
@@ -15,6 +16,10 @@ const (
 	TestX509Certificate   = "testdata/test-user.pem"
 	TestX509Key           = "testdata/test-user-key.pem"
 )
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m)
+}
 
 // Verify that a new http.Client can be created with specific API URL endpoint.
 func TestNewClient_WithAPIEndpoint(t *testing.T) {

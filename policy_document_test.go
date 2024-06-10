@@ -26,6 +26,7 @@ func TestGetSecretPolicyDocument(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
 	}
+	t.Cleanup(client.CloseIdleConnections)
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	policyDoc, err := f5xc.GetSecretPolicyDocument(ctx, client, "ves-io-allow-volterra", "shared")

@@ -7,6 +7,7 @@
         "godox",
         "gofumpt",
         "golangci",
+        "goleak",
         "gosec",
         "nolint",
         "pkcs",
@@ -18,5 +19,9 @@
     ],
     "flagWords": [
         "hte"
+    ],
+    "ignorePaths": [
+        "blindfold/testdata/**",
+        "testdata/**"
     ]
 }

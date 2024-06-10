@@ -1,13 +1,9 @@
-# use goreleaser for builds and containers
-#
-# TODO: @memes
-#  - search for APP and update as needed
-#  - modify labels, as needed
 # spell-checker: disable
 ---
-project_name: APP
+project_name: f5xc
 builds:
-  - env:
+  - id: unseal
+    env:
       - CGO_ENABLED=0
     flags:
       - -trimpath
@@ -26,18 +22,16 @@ builds:
     ignore:
       - goos: darwin
         goarch: '386'
-    # TODO: @memes - modify to match location of main package if not in root
-    main: ./cmd/APP/
     mod_timestamp: '{{ .CommitTimestamp }}'
+    main: ./cmd/unseal/
+    binary: unseal
 gomod:
   proxy: true
 archives:
   - format: binary
-    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
-    rlcp: true
+    name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 source:
   enabled: true
-  rlcp: true
 checksum:
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
   algorithm: sha256
@@ -49,8 +43,6 @@ sboms:
 signs:
   - artifacts: checksum
     cmd: cosign
-    env:
-      - COSIGN_EXPERIMENTAL=1
     certificate: '${artifact}.pem'
     args:
       - sign-blob
@@ -83,8 +75,8 @@ dockers:
       - "--label=maintainer=Matthew Emes <memes@matthewemes.com>"
       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.authors=memes@matthewemes.com"
-      - "--label=org.opencontainers.image.description={{ .ProjectName }} description"
-      - "--label=org.opencontainers.image.licenses=MIT"
+      - "--label=org.opencontainers.image.description={{ .ProjectName }} command line utilities."
+      - "--label=org.opencontainers.image.licenses=Apache-2.0"
       - "--label=org.opencontainers.image.created={{ .Date }}"
       - "--label=org.opencontainers.image.source={{ .GitURL }}/tree/{{ .FullCommit }}"
       - "--label=org.opencontainers.image.documentation={{ .GitURL }}/tree/{{ .FullCommit }}/README.md"

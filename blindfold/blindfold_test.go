@@ -13,7 +13,12 @@ import (
 
 	"github.com/memes/f5xc"
 	"github.com/memes/f5xc/blindfold"
+	"go.uber.org/goleak"
 )
+
+func TestMain(m *testing.M) {
+	goleak.VerifyTestMain(m)
+}
 
 // Verify that the FindVesctl function works as expected.
 // NOTE: Vesctl must be accessible on a system path for the positive-check to succeed.
@@ -83,7 +88,7 @@ func TestExecuteVesctl(t *testing.T) {
 		tst := test
 		t.Run(tst.name, func(t *testing.T) {
 			t.Parallel()
-			ctx, cancel := context.WithTimeout(context.TODO(), 2*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 			defer cancel()
 			var buf bytes.Buffer
 			err := blindfold.ExecuteVesctl(ctx, vesctl, tst.args, tst.params, &buf, &buf)
@@ -149,6 +154,7 @@ func TestSeal(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
 	}
+	t.Cleanup(client.CloseIdleConnections)
 	publicKey := testGetPublicKey(t, client)
 	policyDoc := testGetPolicyDoc(t, client)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -217,6 +223,7 @@ func TestSealFile(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
 	}
+	t.Cleanup(client.CloseIdleConnections)
 	publicKey := testGetPublicKey(t, client)
 	policyDoc := testGetPolicyDoc(t, client)
 	for _, test := range tests {

@@ -3,7 +3,7 @@
 ---
 fileignoreconfig:
 - filename: .github/workflows/release.yml
-  checksum: a975e764f9205155fb006fef6de943574e3d61a314f9215599590a0242ad2efc
+  checksum: 7bbd6e81c12c67f5fb25730e8667d3ef133d0ce58563684f973a5a8b114e3e4f
 - filename: dotenvrc
   checksum: 1a73442a316535a2e8a67a401aef15943f73ab0e405577f6f405e81400a12d57
 - filename: .github/workflows/pre-commit.yml
@@ -26,7 +26,7 @@ fileignoreconfig:
 - filename: blindfold/blindfold.go
   checksum: 60fbac3eecbb76f102e061a393ad73b648ddc503e2c4882f0e1d61c18950bc59
 - filename: go.sum
-  checksum: feaefc13f890541d6f985e9dafd427809892a4df8935520b76f13868ca6125ac
+  checksum: d40fbc68670298353611d0ac7abf9009543ca833f805d8bf21271880765315e4
 - filename: public_key.go
   checksum: 29c5a97d0b576a1a31c9cd4bbe644d2c2c4ba3aa268b31cbb3bda150d5fdeea7
 - filename: public_key_test.go
@@ -43,4 +43,12 @@ fileignoreconfig:
   checksum: ec9e7ebd5c72a8a6aa181aa42eb969bebc6281596faa7ea6fe127cb990a480f8
 - filename: client.go
   checksum: f39a07571ef7be25116d05594695e9f25adc07f0d74653164d75478f83b6b5d3
+- filename: wingman/testdata/blindfold.b64
+  checksum: 40ff0335c8c8270ef346e93e800dbae04a9ba3a773cb74f9a6009e89d0564d2f
+  ignore_detectors:
+  - filecontent
+- filename: wingman/unseal_test.go
+  checksum: 877f63238b9acc85eacc9a217f7587bc1573fc4c0b6d8cb81d14ddd21382ace8
+- filename: cmd/unseal/main.go
+  checksum: dbd301e7574d06de180910b6512faa87c879299af69c922866a3f69f02ee29b8
 version: "1.0"

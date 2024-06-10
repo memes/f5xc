@@ -26,6 +26,7 @@ func TestGetPublicKey(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
 	}
+	t.Cleanup(client.CloseIdleConnections)
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	publicKey, err := f5xc.GetPublicKey(ctx, client, nil)
