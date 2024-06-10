@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/memes/f5xc/compare/v1.1.1...v1.2.0) (2024-06-10)
+
+
+### Features
+
+* Unseal with Wingman ([4f6a022](https://github.com/memes/f5xc/commit/4f6a022330d26ab105d529a7d4adcf31a9dbbbf9))
+
+
+### Bug Fixes
+
+* **client:** CloseIdleConnections for transport ([fa974cf](https://github.com/memes/f5xc/commit/fa974cf00f8615430d3ec1b87b1f2f3d4488525f))
+
 ## [1.1.1](https://github.com/memes/f5xc/compare/v1.1.0...v1.1.1) (2024-04-05)
 
 
