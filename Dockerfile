@@ -1,4 +1,4 @@
-FROM alpine:3.20.0 as ca
+FROM alpine:3.20.1 as ca
 RUN apk --no-cache add ca-certificates-bundle=20240226-r0
 
 FROM scratch
