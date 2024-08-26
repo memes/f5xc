@@ -15,6 +15,7 @@ linters:
   enable:
     - asciicheck
     - bodyclose
+    - copyloopvar
     - depguard
     - dogsled
     - dupl
@@ -22,7 +23,6 @@ linters:
     - err113
     - errcheck
     - errorlint
-    - exportloopref
     - gochecknoglobals
     - gochecknoinits
     - goconst
