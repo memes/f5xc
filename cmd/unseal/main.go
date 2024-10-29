@@ -77,7 +77,6 @@ func main() {
 		return
 	}
 	for _, sourceFile := range os.Args[1:] {
-		sourceFile := sourceFile
 		logger := slog.With("sourceFile", sourceFile)
 		logger.Debug("Attempting to retrieve file data")
 		data, err := os.ReadFile(sourceFile)
