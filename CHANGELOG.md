@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/memes/f5xc/compare/v1.2.0...v1.2.1) (2024-10-29)
+
+
+### Bug Fixes
+
+* Remove copy of loop variable ([c2ae6f6](https://github.com/memes/f5xc/commit/c2ae6f666158524b538744de0dc191f6f55be95c))
+
 ## [1.2.0](https://github.com/memes/f5xc/compare/v1.1.1...v1.2.0) (2024-06-10)
 
 
