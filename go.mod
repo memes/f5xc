@@ -1,6 +1,6 @@
 module github.com/memes/f5xc
 
-go 1.22
+go 1.23.4
 
 require (
 	go.uber.org/goleak v1.3.0
