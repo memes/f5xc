@@ -30,6 +30,8 @@ var (
 	ErrForbidden = errors.New("access to endpoint is denied")
 	// Returned by EnvelopeAPICall function when response status is not 200, 401 or 403.
 	ErrUnexpectedHTTPStatus = errors.New("endpoint returned an unexpected status code")
+	// Internal error that indicates a cast failure of DefaultTransport.
+	ErrCastTransport = errors.New("failed to cast DefaultTransport to *http.Transport")
 )
 
 // Defines the configuration options for an F5 XC Client.
@@ -211,7 +213,11 @@ func NewClient(options ...Option) (*http.Client, error) {
 	if cfg.Cert != nil {
 		tlsConfig.Certificates = []tls.Certificate{*cfg.Cert}
 	}
-	baseTransport := http.DefaultTransport.(*http.Transport).Clone()
+	baseTransport, ok := http.DefaultTransport.(*http.Transport)
+	if !ok {
+		return nil, ErrCastTransport
+	}
+	baseTransport = baseTransport.Clone()
 	baseTransport.TLSClientConfig = tlsConfig
 	return &http.Client{
 		Transport: &transport{
