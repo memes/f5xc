@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.2](https://github.com/memes/f5xc/compare/v1.2.1...v1.2.2) (2024-12-05)
+
+
+### Bug Fixes
+
+* Add check when casting http.DefaultTransport ([281ced2](https://github.com/memes/f5xc/commit/281ced23b70f2e02b96a38001159cb1bfad6d6e4))
+* Bump go to v1.23.4 ([1dd454a](https://github.com/memes/f5xc/commit/1dd454ade6f670b974712e1425129e5289e3ad27))
+
 ## [1.2.1](https://github.com/memes/f5xc/compare/v1.2.0...v1.2.1) (2024-10-29)
 
 
