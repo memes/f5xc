@@ -39,7 +39,7 @@ jobs:
           go-version-file: go.mod
           cache: true
       - name: Execute linter
-        uses: golangci/golangci-lint-action@v6.1.1
+        uses: golangci/golangci-lint-action@v6.3.2
         with:
           version: latest
   go-test:
