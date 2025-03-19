@@ -3,6 +3,7 @@ package f5xc
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -89,38 +90,57 @@ func WithCACert(caCert string) Option {
 
 // Implements an Option that sets Client authentication to use the provided
 // PKCS#12 certificate, disabling token authentication.
-func WithP12Certificate(path, passphrase string) Option {
+func WithP12CertificateFile(path, passphrase string) Option {
 	return func(c *config) error {
 		logger := slog.With("path", path)
-		logger.Debug("Adding PKCS#12 certificate as authenticator")
+		logger.Debug("Adding PKCS#12 certificate from file as authenticator")
 		rawData, err := os.ReadFile(path)
 		if err != nil {
 			return fmt.Errorf("failed to read from P12 file %s: %w", path, err)
 		}
-		key, cert, caCerts, err := pkcs12.DecodeChain(rawData, passphrase)
-		if err != nil {
-			return fmt.Errorf("failed to decode P12 file %s: %w", path, err)
-		}
-		if len(caCerts) > 0 {
-			if c.caCertPool == nil {
-				pool, err := x509.SystemCertPool()
-				if err != nil {
-					return fmt.Errorf("failed to load system CA certs as pool: %w", err)
-				}
-				c.caCertPool = pool
-			}
-			for _, caCert := range caCerts {
-				c.caCertPool.AddCert(caCert)
-			}
-		}
-		c.Cert = &tls.Certificate{
-			Certificate: [][]byte{cert.Raw},
-			Leaf:        cert,
-			PrivateKey:  key,
-		}
-		c.AuthToken = ""
-		return nil
+		return loadP12Certificate(c, rawData, passphrase)
 	}
+}
+
+// Implements an Option that sets Client authentication to use the provided
+// base64 encoded PKCS#12 certificate, disabling token authentication.
+func WithP12CertificateContent(cert, passphrase string) Option {
+	return func(c *config) error {
+		slog.Debug("Adding PKCS#12 certificate from base64 as authenticator")
+		rawData, err := base64.StdEncoding.DecodeString(cert)
+		if err != nil {
+			return fmt.Errorf("failed to decode base64 data: %w", err)
+		}
+		return loadP12Certificate(c, rawData, passphrase)
+	}
+}
+
+// Implements an Option that sets Client authentication to use the provided
+// PKCS#12 certificate, disabling token authentication.
+func loadP12Certificate(c *config, rawData []byte, passphrase string) error {
+	key, cert, caCerts, err := pkcs12.DecodeChain(rawData, passphrase)
+	if err != nil {
+		return fmt.Errorf("failed to decode P12 data: %w", err)
+	}
+	if len(caCerts) > 0 {
+		if c.caCertPool == nil {
+			pool, err := x509.SystemCertPool()
+			if err != nil {
+				return fmt.Errorf("failed to load system CA certs as pool: %w", err)
+			}
+			c.caCertPool = pool
+		}
+		for _, caCert := range caCerts {
+			c.caCertPool.AddCert(caCert)
+		}
+	}
+	c.Cert = &tls.Certificate{
+		Certificate: [][]byte{cert.Raw},
+		Leaf:        cert,
+		PrivateKey:  key,
+	}
+	c.AuthToken = ""
+	return nil
 }
 
 // Implements an Option that sets Client authentication to use the x509 certificate

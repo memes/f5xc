@@ -21,7 +21,7 @@ func TestGetSecretPolicyDocument(t *testing.T) {
 	}
 	client, err := f5xc.NewClient(
 		f5xc.WithAPIEndpoint(apiURL),
-		f5xc.WithP12Certificate(p12Path, p12Passphrase),
+		f5xc.WithP12CertificateFile(p12Path, p12Passphrase),
 	)
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
