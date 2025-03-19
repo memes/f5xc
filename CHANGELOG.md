@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/memes/f5xc/compare/v1.2.2...v1.3.0) (2025-03-19)
+
+
+### Features
+
+* Auth support for base64 encoded P12 string ([9fcedae](https://github.com/memes/f5xc/commit/9fcedaee96cabc9cf7dc23459a9d365fee27f99b)), closes [#73](https://github.com/memes/f5xc/issues/73)
+
 ## [1.2.2](https://github.com/memes/f5xc/compare/v1.2.1...v1.2.2) (2024-12-05)
 
 
