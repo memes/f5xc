@@ -29,7 +29,8 @@ builds:
 gomod:
   proxy: true
 archives:
-  - format: binary
+  - formats:
+      - binary
     name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 source:
   enabled: true
@@ -55,7 +56,7 @@ signs:
       - '--yes'
     output: true
 snapshot:
-  name_template: "{{ incpatch .Tag }}-next"
+  version_template: "{{ incpatch .Tag }}-next"
 changelog:
   disable: true
 dockers:

@@ -1,0 +1,31 @@
+{
+  "name": "memes-f5xc",
+  "image": "mcr.microsoft.com/devcontainers/go:1.23-bookworm",
+  "features": {
+    "ghcr.io/memes/devcontainers-features/direnv:1": {},
+    "ghcr.io/memes/devcontainers-features/golangci-lint:1": {},
+    "ghcr.io/memes/devcontainers-features/goreleaser:1": {},
+    "ghcr.io/memes/devcontainers-features/starship:1": {},
+    "ghcr.io/memes/devcontainers-features/talisman:1": {},
+    "ghcr.io/memes/devcontainers-features/vesctl:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "usernamehw.errorlens",
+        "streetsidesoftware.code-spell-checker",
+        "DavidAnson.vscode-markdownlint",
+        "esbenp.prettier-vscode",
+        "Gruntfuggly.todo-tree",
+        "redhat.vscode-yaml"
+      ]
+    }
+  },
+  "containerUser": "vscode",
+  "onCreateCommand": {
+    "pre-commit": "sudo sh -c 'apt update && apt install -y --no-install-recommends pipx && rm -rf /var/lib/apt/lists/*' && pipx install pre-commit && pre-commit install --hook-type commit-msg --hook-type pre-commit"
+  },
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.volterra,target=/home/vscode/.volterra,type=bind"
+  ]
+}

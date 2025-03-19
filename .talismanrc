@@ -38,11 +38,11 @@ fileignoreconfig:
 - filename: blindfold/blindfold_test.go
   checksum: 25470f65b1721d3c3385eaa70c7c77924ca7cbfd5469fdfe3e4e7d4d208188df
 - filename: client_test.go
-  checksum: 8ab504c43d179ed11eabfa6dd2efebfe2d5bfad38b54c4a4f4678f86babfe1e8
+  checksum: 14e486291b82a60a746118d7502d2a89936a5ec7a79dcbabc7ec37b6155f7378
 - filename: policy_document.go
   checksum: ec9e7ebd5c72a8a6aa181aa42eb969bebc6281596faa7ea6fe127cb990a480f8
 - filename: client.go
-  checksum: f39a07571ef7be25116d05594695e9f25adc07f0d74653164d75478f83b6b5d3
+  checksum: 97c5982d3bd920be6e01239bf7a598850009625fe54b53e000a7a5da2b977609
 - filename: wingman/testdata/blindfold.b64
   checksum: 40ff0335c8c8270ef346e93e800dbae04a9ba3a773cb74f9a6009e89d0564d2f
   ignore_detectors:
