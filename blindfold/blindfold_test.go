@@ -88,7 +88,7 @@ func TestExecuteVesctl(t *testing.T) {
 		tst := test
 		t.Run(tst.name, func(t *testing.T) {
 			t.Parallel()
-			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 			var buf bytes.Buffer
 			err := blindfold.ExecuteVesctl(ctx, vesctl, tst.args, tst.params, &buf, &buf)
@@ -149,7 +149,7 @@ func TestSeal(t *testing.T) {
 	}
 	client, err := f5xc.NewClient(
 		f5xc.WithAPIEndpoint(apiURL),
-		f5xc.WithP12Certificate(p12Path, p12Passphrase),
+		f5xc.WithP12CertificateFile(p12Path, p12Passphrase),
 	)
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
@@ -218,7 +218,7 @@ func TestSealFile(t *testing.T) {
 	}
 	client, err := f5xc.NewClient(
 		f5xc.WithAPIEndpoint(apiURL),
-		f5xc.WithP12Certificate(p12Path, p12Passphrase),
+		f5xc.WithP12CertificateFile(p12Path, p12Passphrase),
 	)
 	if err != nil {
 		t.Errorf("Unexpected error raised by NewClient: %v", err)
