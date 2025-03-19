@@ -2,7 +2,7 @@
 ---
 repos:
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.36.2
     hooks:
       - id: yamllint
         files: \.(yml|yaml|talismanrc)$
@@ -29,6 +29,6 @@ repos:
           - main
       - id: trailing-whitespace
   - repo: https://github.com/thoughtworks/talisman
-    rev: v1.32.0
+    rev: v1.32.2
     hooks:
       - id: talisman-commit

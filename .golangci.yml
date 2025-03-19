@@ -73,6 +73,7 @@ linters-settings:
         allow:
           - $gostd
           - github.com/memes
+          - gopkg.in/yaml.v3
           - software.sslmate.com/src/go-pkcs12
       test:
         files:
@@ -80,6 +81,7 @@ linters-settings:
         allow:
           - $gostd
           - github.com/memes
+          - go.uber.org/goleak
           - software.sslmate.com/src/go-pkcs12
   errcheck:
     check-type-assertions: true
