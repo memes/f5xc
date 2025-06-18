@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-// The Wingman REST unseal endpoint.
+// UnsealEndpoint defines the REST unseal endpoint in Wingman's API.
 const UnsealEndpoint = "/secret/unseal"
 
 // ErrDeniedByPolicy is returned by unseal functions when access is denied by security policy used during seal.
@@ -40,7 +40,8 @@ func Unseal(ctx context.Context, client *http.Client, endpoint string, sealed []
 	return UnsealEncoded(ctx, client, endpoint, buf.Bytes())
 }
 
-// Unseal a byte slice of base64 encoded blindfold data, and returns a byte array of the unsealed data.
+// UnsealEncoded performs an unseal on a byte slice of base64 encoded blindfold data, and returns a byte array of the
+// unsealed data.
 //
 // The sealed bytes will be embedded in the request as-is; use [Unseal] if the sealed bytes must be base64 encoded as
 // required by Wingman's unseal endpoint.
@@ -66,7 +67,11 @@ func UnsealEncoded(ctx context.Context, client *http.Client, endpoint string, se
 		return nil, fmt.Errorf("failure during unseal request: %w", err)
 	}
 	slog.Debug("Processing unseal response", "statusCode", resp.StatusCode)
-	defer resp.Body.Close()
+	defer func() {
+		if err = resp.Body.Close(); err != nil {
+			logger.Warn("Failed to close response body", "error", err)
+		}
+	}()
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read wingman response body: %w", err)
@@ -87,8 +92,8 @@ func UnsealEncoded(ctx context.Context, client *http.Client, endpoint string, se
 	return nil, fmt.Errorf("unexpected HTTP status code %d: message %q: %w", resp.StatusCode, string(respBody), ErrUnexpectedHTTPStatus)
 }
 
-// Unseal a byte slice of blindfold data, and returns a byte array of the unsealed data, using a sidecar Wingman listening
-// on HTTP port 8070.
+// DefaultUnseal performs an unseal on a byte slice of blindfold data, and returns a byte array of the unsealed data
+// using a sidecar Wingman listening on HTTP port 8070.
 //
 // The sealed bytes will be base64 encoded before sending request; if you have a base64 encoded blindfold secret, as
 // output from vesctl say, use [DefaultUnsealEncoded] function to avoid double-encoding of the sealed data.
@@ -96,8 +101,8 @@ func DefaultUnseal(ctx context.Context, sealed []byte) ([]byte, error) {
 	return Unseal(ctx, http.DefaultClient, DefaultWingmanURL+UnsealEndpoint, sealed)
 }
 
-// Unseal a byte slice of base64 encoded blindfold data, and returns a byte array of the unsealed data, using a sidecar
-// Wingman listening on HTTP port 8070.
+// DefaultUnsealEncoded performs an unseal on a byte slice of base64 encoded blindfold data, and returns a byte array of
+// the unsealed data, using a sidecar Wingman listening on HTTP port 8070.
 //
 // The sealed bytes will be embedded in the request as-is; use [DefaultUnseal] if the sealed bytes must be base64 encoded
 // as required by Wingman's unseal endpoint.

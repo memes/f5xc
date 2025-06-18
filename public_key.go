@@ -7,10 +7,10 @@ import (
 	"net/http"
 )
 
-// The partial URL to fetch a PublicKey from F5 Distributed Cloud.
+// PublicKeyURL defines the partial URL to fetch a PublicKey from F5 Distributed Cloud.
 const PublicKeyURL = "/api/secret_management/get_public_key"
 
-// Represents an F5XC Public Key for authenticated account, as described at
+// PublicKey represents an F5XC Public Key for authenticated account, as described at
 // https://docs.cloud.f5.com/docs/api/secret-management#operation/ves.io.schema.secret_management.CustomAPI.GetPublicKey.
 type PublicKey struct {
 	KeyVersion           int    `json:"key_version" yaml:"keyVersion"`
@@ -19,7 +19,7 @@ type PublicKey struct {
 	Tenant               string `json:"tenant" yaml:"tenant"`
 }
 
-// Returns a PublicKey from the F5 Distributed Cloud API endpoint for Secrets Management, or an error.
+// GetPublicKey returns a PublicKey from the F5 Distributed Cloud API endpoint for Secrets Management, or an error.
 func GetPublicKey(ctx context.Context, client *http.Client, version *int) (*PublicKey, error) {
 	logger := slog.With("version", version)
 	logger.Debug("Retrieving Public Key")
