@@ -94,7 +94,7 @@ func WithP12CertificateFile(path, passphrase string) Option {
 	return func(c *config) error {
 		logger := slog.With("path", path)
 		logger.Debug("Adding PKCS#12 certificate from file as authenticator")
-		rawData, err := os.ReadFile(path)
+		rawData, err := os.ReadFile(path) //nolint: gosec // Allow caller to load CA cert from file
 		if err != nil {
 			return fmt.Errorf("failed to read from P12 file %s: %w", path, err)
 		}

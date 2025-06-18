@@ -80,7 +80,7 @@ func main() {
 	for _, sourceFile := range os.Args[1:] {
 		logger := slog.With("sourceFile", sourceFile)
 		logger.Debug("Attempting to retrieve file data")
-		data, err := os.ReadFile(sourceFile)
+		data, err := os.ReadFile(sourceFile) //nolint: gosec // Ack risk, but unseal has to load file from user provided path
 		if err != nil {
 			logger.Error("Error reading JSON specification from file", "error", err)
 			retCode = 1

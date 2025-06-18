@@ -91,7 +91,7 @@ func ExecuteVesctl(ctx context.Context, vesctl string, args []string, params map
 	for k, v := range parameters {
 		finalArguments = append(finalArguments, k, v)
 	}
-	cmd := exec.CommandContext(ctx, vesctl, finalArguments...)
+	cmd := exec.CommandContext(ctx, vesctl, finalArguments...) //nolint: gosec // Ack risk, but this is deliberate
 	cmd.Env = []string{
 		"VES_P12_PASSWORD=" + RandomString(16),
 		"VOLT_API_P12_FILE=" + emptyInputFile,
