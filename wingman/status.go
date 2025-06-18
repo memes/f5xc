@@ -59,7 +59,11 @@ func WaitForReady(ctx context.Context, client *http.Client, endpoint string, sle
 				break
 			}
 			logger := logger.With("statusCode", resp.StatusCode)
-			defer resp.Body.Close()
+			defer func() {
+				if err = resp.Body.Close(); err != nil {
+					logger.Warn("Failed to close response body", "error", err)
+				}
+			}()
 			body, err := io.ReadAll(resp.Body)
 			if err != nil {
 				logger.Debug("failed to read wingman status response body, ignoring", "err", err)

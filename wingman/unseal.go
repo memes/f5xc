@@ -67,7 +67,11 @@ func UnsealEncoded(ctx context.Context, client *http.Client, endpoint string, se
 		return nil, fmt.Errorf("failure during unseal request: %w", err)
 	}
 	slog.Debug("Processing unseal response", "statusCode", resp.StatusCode)
-	defer resp.Body.Close()
+	defer func() {
+		if err = resp.Body.Close(); err != nil {
+			logger.Warn("Failed to close response body", "error", err)
+		}
+	}()
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read wingman response body: %w", err)

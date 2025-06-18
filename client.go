@@ -257,7 +257,11 @@ func EnvelopeAPICall[T EnvelopeAllowed](client *http.Client, req *http.Request) 
 	if err != nil {
 		return nil, fmt.Errorf("failure making API call: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err = resp.Body.Close(); err != nil {
+			slog.Warn("Failed to close response body", "error", err)
+		}
+	}()
 	switch resp.StatusCode {
 	case http.StatusOK:
 		data, err := io.ReadAll(resp.Body)

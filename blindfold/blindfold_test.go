@@ -175,7 +175,11 @@ func testMakeTempPlaintextFile(t *testing.T, tmpDir string) string {
 	if err != nil {
 		t.Errorf("failed to create temporary plaintext file: %v", err)
 	}
-	defer tmpFile.Close()
+	defer func() {
+		if err = tmpFile.Close(); err != nil {
+			t.Logf("Failed to close temporary file: %v", err)
+		}
+	}()
 	if _, err = tmpFile.Write([]byte("This is a plaintext document to be blindfolded")); err != nil {
 		t.Errorf("failed to write data to plaintext file: %v", err)
 	}

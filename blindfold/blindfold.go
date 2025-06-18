@@ -67,7 +67,11 @@ func ExecuteVesctl(ctx context.Context, vesctl string, args []string, params map
 		return fmt.Errorf("failed to create empty file: %w", err)
 	}
 	emptyInputFile := emptyFile.Name()
-	defer os.Remove(emptyInputFile)
+	defer func() {
+		if err = os.Remove(emptyInputFile); err != nil {
+			logger.Warn("Failed to remove empty file", "emptyInputFile", emptyInputFile, "error", err)
+		}
+	}()
 	if err := emptyFile.Close(); err != nil {
 		return fmt.Errorf("failed to close empty file: %w", err)
 	}
@@ -132,14 +136,20 @@ func Seal(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.Pub
 	if err != nil {
 		return nil, fmt.Errorf("failed to create temporary directory: %w", err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer func() {
+		if err = os.RemoveAll(tmpDir); err != nil {
+			logger.Warn("Failed to delete temporary directory and contents", "tmpDir", tmpDir, "error", err)
+		}
+	}()
 
 	plaintextFile, err := os.CreateTemp(tmpDir, "blindfold")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create plaintext file: %w", err)
 	}
 	if _, err = plaintextFile.Write(plaintext); err != nil {
-		_ = plaintextFile.Close()
+		if err1 := plaintextFile.Close(); err1 != nil {
+			logger.Warn("Failed to close temporary plaintext file", "plaintextFile", plaintextFile.Name(), "error", err1)
+		}
 		return nil, fmt.Errorf("failed to write plaintext file: %w", err)
 	}
 	if err = plaintextFile.Close(); err != nil {
@@ -152,22 +162,26 @@ func Seal(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.Pub
 // Helper function to marshal an object to an Envelope and write to a temp file.
 // It is the callers responsibility to clean-up the temporary file.
 func createTempYAMLEnvelope[T f5xc.EnvelopeAllowed](obj T, tmpDir string) (string, error) {
-	f, err := os.CreateTemp(tmpDir, "blindfold")
+	tmpFile, err := os.CreateTemp(tmpDir, "blindfold")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp file: %w", err)
 	}
-	defer f.Close()
+	defer func() {
+		if err = tmpFile.Close(); err != nil {
+			slog.Warn("Failed to close temp file", "tmpFile", tmpFile.Name(), "error", err)
+		}
+	}()
 	data, err := yaml.Marshal(f5xc.Envelope[T]{Data: obj})
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal to YAML: %w", err)
 	}
-	if _, err = f.Write(data); err != nil {
+	if _, err = tmpFile.Write(data); err != nil {
 		return "", fmt.Errorf("failed to write data to file: %w", err)
 	}
-	if err := f.Close(); err != nil {
+	if err := tmpFile.Close(); err != nil {
 		return "", fmt.Errorf("failed to close file: %w", err)
 	}
-	return f.Name(), nil
+	return tmpFile.Name(), nil
 }
 
 // SealFile executes vesctl to blindfold the supplied plaintext file using the supplied PublicKey and PolicyDocument,
@@ -189,7 +203,11 @@ func SealFile(ctx context.Context, vesctl, plaintextPath string, pubKey *f5xc.Pu
 	if err != nil {
 		return nil, fmt.Errorf("failed to create temporary directory: %w", err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer func() {
+		if err = os.RemoveAll(tmpDir); err != nil {
+			logger.Warn("Failed to delete temporary directory and contents", "tmpDir", tmpDir, "error", err)
+		}
+	}()
 	pubKeyFile, err := createTempYAMLEnvelope[f5xc.PublicKey](*pubKey, tmpDir)
 	if err != nil {
 		return nil, fmt.Errorf("failed to write PublicKey envelope file: %w", err)
