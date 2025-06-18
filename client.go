@@ -17,21 +17,21 @@ import (
 )
 
 var (
-	// Failed to add CA certificate to pool.
+	// ErrFailedToAppendCACert is returned when client failed to add CA certificate to pool.
 	ErrFailedToAppendCACert = errors.New("failed to append CA cert to CA pool")
-	// Could not create a new custom http.Client because authentication was not provided.
+	// ErrMissingAuthentication is returned when the client could not create a new custom http.Client because authentication was not provided.
 	ErrMissingAuthentication = errors.New("a client certificate or API token must be provided")
-	// Endpoint URL could not be parsed from the string provided, or the schema was invalid.
+	// ErrInvalidEndpointURL is returned when a valid URL could not be parsed from the string provided, or the schema was invalid.
 	ErrInvalidEndpointURL = errors.New("failed to parse API endpoint URL")
-	// Endpoint URL was not provided to NewClient.
+	// ErrMissingURL is returned when the required endpoint URL was not provided to NewClient.
 	ErrMissingURL = errors.New("an API URL must be provided")
-	// Authentication via client certificate or API Token is not present in the request.
+	// ErrUnauthorized is returned when authentication via client certificate or API Token is not present in the request.
 	ErrUnauthorized = errors.New("authentication is required")
-	// Authorization failed and the client does not have permission to reach the endpoint.
+	// ErrForbidden is returned when authorization fails and the client does not have permission to reach the endpoint.
 	ErrForbidden = errors.New("access to endpoint is denied")
-	// Returned by EnvelopeAPICall function when response status is not 200, 401 or 403.
+	// ErrUnexpectedHTTPStatus is returned by EnvelopeAPICall function when response status is not 200, 401 or 403.
 	ErrUnexpectedHTTPStatus = errors.New("endpoint returned an unexpected status code")
-	// Internal error that indicates a cast failure of DefaultTransport.
+	// ErrCastTransport is an internal error that indicates a cast failure of DefaultTransport.
 	ErrCastTransport = errors.New("failed to cast DefaultTransport to *http.Transport")
 )
 
@@ -43,10 +43,10 @@ type config struct {
 	AuthToken   string
 }
 
-// Defines a configuration setting function.
+// Option defines a configuration setting function.
 type Option func(*config) error
 
-// Use the supplied endpoint URL for all requests to F5 XC when calling NewClient.
+// WithAPIEndpoint changes the endpoint URL for all requests to F5 XC when calling NewClient.
 func WithAPIEndpoint(apiEndpoint string) Option {
 	return func(c *config) error {
 		slog.Debug("Adding API URL", "apiURL", apiEndpoint)
@@ -64,8 +64,8 @@ func WithAPIEndpoint(apiEndpoint string) Option {
 	}
 }
 
-// Adds the x509 CA Certificate at the given path to the set CA certificates known
-// to the system when calling NewClient.
+// WithCACert adds the x509 CA Certificate at the given path to the set CA certificates known to the system when calling
+// NewClient.
 func WithCACert(caCert string) Option {
 	return func(c *config) error {
 		logger := slog.With("caCert", caCert)
@@ -88,8 +88,8 @@ func WithCACert(caCert string) Option {
 	}
 }
 
-// Implements an Option that sets Client authentication to use the provided
-// PKCS#12 certificate, disabling token authentication.
+// WithP12CertificateFile implements an Option that sets Client authentication to use the provided PKCS#12 certificate,
+// disabling token authentication.
 func WithP12CertificateFile(path, passphrase string) Option {
 	return func(c *config) error {
 		logger := slog.With("path", path)
@@ -102,8 +102,8 @@ func WithP12CertificateFile(path, passphrase string) Option {
 	}
 }
 
-// Implements an Option that sets Client authentication to use the provided
-// base64 encoded PKCS#12 certificate, disabling token authentication.
+// WithP12CertificateContent implements an Option that sets Client authentication to use the provided base64 encoded
+// PKCS#12 certificate, disabling token authentication.
 func WithP12CertificateContent(cert, passphrase string) Option {
 	return func(c *config) error {
 		slog.Debug("Adding PKCS#12 certificate from base64 as authenticator")
@@ -143,8 +143,8 @@ func loadP12Certificate(c *config, rawData []byte, passphrase string) error {
 	return nil
 }
 
-// Implements an Option that sets Client authentication to use the x509 certificate
-// and key pair, disabling token authentication.
+// WithCertKeyPair implements an Option that sets Client authentication to use the x509 certificate and key pair,
+// disabling token authentication.
 func WithCertKeyPair(certPath, keyPath string) Option {
 	return func(c *config) error {
 		logger := slog.With("certPath", certPath, "keyPath", keyPath)
@@ -159,8 +159,8 @@ func WithCertKeyPair(certPath, keyPath string) Option {
 	}
 }
 
-// Implements an option that sets client authentication to use the provided
-// authentication token, disabling certificate based authentication.
+// WithAuthToken implements an option that sets client authentication to use the provided authentication token,
+// disabling certificate based authentication.
 func WithAuthToken(token string) Option {
 	return func(c *config) error {
 		slog.Debug("Adding authentication token")
@@ -211,7 +211,7 @@ func (t *transport) CloseIdleConnections() {
 	t.base.CloseIdleConnections()
 }
 
-// Creates a new HTTP client that is pre-configured to authenticate to F5 XC endpoints.
+// NewClient creates a new HTTP client that is pre-configured to authenticate to F5 XC endpoints.
 func NewClient(options ...Option) (*http.Client, error) {
 	cfg := &config{}
 	for _, option := range options {
@@ -248,11 +248,9 @@ func NewClient(options ...Option) (*http.Client, error) {
 	}, nil
 }
 
-// Helper method to make F5XC API requests where the response is expected to be
-// in an Envelope, returning the embedded resource or an error. This function
-// expects an HTTP status code of 200 as the only indicator of success; it will
-// return nil if HTTP status code is 404, or one of the f5xc package errors for
-// all other statuses.
+// EnvelopeAPICall is a helper method to make F5XC API requests where the response is expected to be in an Envelope,
+// returning the embedded resource or an error. This function expects an HTTP status code of 200 as the only indicator
+// of success; it will return nil if HTTP status code is 404, or one of the f5xc package errors for all other statuses.
 func EnvelopeAPICall[T EnvelopeAllowed](client *http.Client, req *http.Request) (*T, error) {
 	slog.Debug("Calling API")
 	resp, err := client.Do(req)

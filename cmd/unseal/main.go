@@ -30,9 +30,10 @@ import (
 )
 
 const (
-	// The environment variable name that can be set to override the default wingman base URL.
+	// EnvWingmanURL defines the environment variable name that can be set to override the default wingman base URL.
 	EnvWingmanURL = "UNSEAL_WINGMAN_URL"
-	// The environment variable name that can be set to change the default [log/slog] logging level.
+	// EnvLogLevel defines the environment variable name that can be set to change the default [log/slog] logging
+	// level.
 	EnvLogLevel = "UNSEAL_LOG_LEVEL"
 )
 

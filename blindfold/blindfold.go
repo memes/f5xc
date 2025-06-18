@@ -17,16 +17,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// The default name to use when searching for vesctl.
+// VesctlExecutable is the default name to use when searching for vesctl binary.
 const VesctlExecutable = "vesctl"
 
 // ErrVesctl indicates that vesctl process failed or exited with status code other than 0. It will usually contain a
 // wrapped error with specifics.
 var ErrVesctl = errors.New("failed to execute vesctl")
 
-// Finds the vesctl binary matching name in system paths, or returns an error. The name parameter can be left empty to
-// find vesctl using it's default name, set to a different filename to search (e.g. "vesctl.0.2.37"), or a full path to
-// a known binary location.
+// FindVesctl locates the vesctl binary matching name in system paths, or returns an error. The name parameter can be
+// left empty to find vesctl using it's default name, set to a different filename to search (e.g. "vesctl.0.2.37"), or a
+// full path to a known binary location.
 func FindVesctl(name string) (string, error) {
 	if name == "" {
 		name = VesctlExecutable
@@ -42,7 +42,7 @@ func FindVesctl(name string) (string, error) {
 // Source for semi-random override of Volterra environment variables.
 const randomStringChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345689_"
 
-// Helper function to create a pseudo-random string of length n.
+// RandomString is a helper function to create a pseudo-random string of length n.
 func RandomString(n int) string {
 	buf := make([]byte, n)
 	for i := range buf {
@@ -52,12 +52,12 @@ func RandomString(n int) string {
 	return string(buf)
 }
 
-// Execute vesctl with as much isolation as possible. We really, really don't want vesctl making API calls accidentally
-// and it is expected that the consumer of this library is using this function where the environment variables include
-// one or more of VES_P12_PASSWORD, VOLT_API_*, or VOLTERRA_TOKEN set to legitimate values. For that reason, vesctl will
-// be launched with a set of environment variables and command line options set to dummy/empty/random values to minimize
-// any accidental leak of information *except* for the parameters which are required for blindfold operation, which is
-// itself an offline function.
+// ExecuteVesctl launches vesctl with as much isolation as possible. We really, really don't want vesctl making API calls
+// accidentally and it is expected that the consumer of this library is using this function where the environment
+// variables include one or more of VES_P12_PASSWORD, VOLT_API_*, or VOLTERRA_TOKEN set to legitimate values. For that
+// reason, vesctl will be launched with a set of environment variables and command line options set to dummy/empty/random
+// values to minimize any accidental leak of information *except* for the parameters which are required for blindfold
+// operation, which is itself an offline function.
 func ExecuteVesctl(ctx context.Context, vesctl string, args []string, params map[string]string, stdOut, stdErr io.Writer) error {
 	logger := slog.With("vesctl", vesctl, "args", args, "params", params)
 	logger.Debug("Attempting to execute vesctl")
@@ -111,17 +111,17 @@ func ExecuteVesctl(ctx context.Context, vesctl string, args []string, params map
 	return nil
 }
 
-// Executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument, returning the
-// Base64 encoded sealed data.
+// Blindfold executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument,
+// returning the Base64 encoded sealed data.
 // Deprecated: Blindfold function exists for backward compatibility with v1.0.x and should not be used in new code; use
 // Seal or SealFile functions instead.
 func Blindfold(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
 	return Seal(ctx, vesctl, plaintext, pubKey, policyDoc)
 }
 
-// Executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument, returning the
-// Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to vesctl, and will
-// use an execution environment that avoids avoid leaking data.
+// Seal executes vesctl to blindfold the supplied plaintext using the supplied PublicKey and PolicyDocument, returning
+// the Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to vesctl, and
+// will use an execution environment that avoids avoid leaking data.
 func Seal(ctx context.Context, vesctl string, plaintext []byte, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
 	logger := slog.With("vesctl", vesctl)
 	logger.Debug("Preparing to blindfold data")
@@ -170,9 +170,9 @@ func createTempYAMLEnvelope[T f5xc.EnvelopeAllowed](obj T, tmpDir string) (strin
 	return f.Name(), nil
 }
 
-// Executes vesctl to blindfold the supplied plaintext file using the supplied PublicKey and PolicyDocument, returning
-// the Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to vesctl, and
-// will use an execution environment that tries to avoid leaking data.
+// SealFile executes vesctl to blindfold the supplied plaintext file using the supplied PublicKey and PolicyDocument,
+// returning the Base64 encoded sealed data. The function will write and cleanup temporary files to use as inputs to
+// vesctl, and will use an execution environment that tries to avoid leaking data.
 func SealFile(ctx context.Context, vesctl, plaintextPath string, pubKey *f5xc.PublicKey, policyDoc *f5xc.SecretPolicyDocument) ([]byte, error) {
 	logger := slog.With("vesctl", vesctl, "plaintextPath", plaintextPath)
 	logger.Debug("Preparing to blindfold")

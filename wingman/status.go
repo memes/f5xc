@@ -15,10 +15,10 @@ import (
 	"time"
 )
 
-// The default URL base to use when accessing Wingman deployed as a sidecar on vk8s.
+// DefaultWingmanURL defines the default URL base to use when accessing Wingman deployed as a sidecar on vk8s.
 const DefaultWingmanURL = "http://localhost:8070"
 
-// Wingman REST status endpoint.
+// StatusEndpoint defines the Wingman REST API status endpoint.
 const StatusEndpoint = "/status"
 
 // ErrNotReady indicates that Wingman service has not reported as ready to receive requests before the context was canceled.
