@@ -2,6 +2,7 @@
   "name": "memes-f5xc",
   "image": "mcr.microsoft.com/devcontainers/go:1.23-bookworm",
   "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/memes/devcontainers-features/direnv:1": {},
     "ghcr.io/memes/devcontainers-features/golangci-lint:1": {},
     "ghcr.io/memes/devcontainers-features/goreleaser:1": {},
@@ -17,7 +18,8 @@
         "DavidAnson.vscode-markdownlint",
         "esbenp.prettier-vscode",
         "Gruntfuggly.todo-tree",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-containers"
       ]
     }
   },
