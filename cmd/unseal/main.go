@@ -30,9 +30,10 @@ import (
 )
 
 const (
-	// The environment variable name that can be set to override the default wingman base URL.
+	// EnvWingmanURL defines the environment variable name that can be set to override the default wingman base URL.
 	EnvWingmanURL = "UNSEAL_WINGMAN_URL"
-	// The environment variable name that can be set to change the default [log/slog] logging level.
+	// EnvLogLevel defines the environment variable name that can be set to change the default [log/slog] logging
+	// level.
 	EnvLogLevel = "UNSEAL_LOG_LEVEL"
 )
 
@@ -79,7 +80,7 @@ func main() {
 	for _, sourceFile := range os.Args[1:] {
 		logger := slog.With("sourceFile", sourceFile)
 		logger.Debug("Attempting to retrieve file data")
-		data, err := os.ReadFile(sourceFile)
+		data, err := os.ReadFile(sourceFile) //nolint: gosec // Ack risk, but unseal has to load file from user provided path
 		if err != nil {
 			logger.Error("Error reading JSON specification from file", "error", err)
 			retCode = 1

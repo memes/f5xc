@@ -24,11 +24,11 @@ fileignoreconfig:
   ignore_detectors:
   - filecontent
 - filename: blindfold/blindfold.go
-  checksum: 60fbac3eecbb76f102e061a393ad73b648ddc503e2c4882f0e1d61c18950bc59
+  checksum: 54bea5d000fa44fa82c8c413f29ee0602bc40c62660ccb6cb040b47cb0d38795
 - filename: go.sum
   checksum: d40fbc68670298353611d0ac7abf9009543ca833f805d8bf21271880765315e4
 - filename: public_key.go
-  checksum: 29c5a97d0b576a1a31c9cd4bbe644d2c2c4ba3aa268b31cbb3bda150d5fdeea7
+  checksum: fe564f4e39de5373d809cf572eb8905c24a956a54c7531fb9dc19c2f6c6198ad
 - filename: public_key_test.go
   checksum: 3683e73514b171efc882e8549a1a8e852fdb82e68d461448db2c306317570397
 - filename: policy_document_test.go

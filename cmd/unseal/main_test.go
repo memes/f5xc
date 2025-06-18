@@ -129,7 +129,7 @@ func TestProcess(t *testing.T) {
 				t.Errorf("Expected process to raise %v, got %v", tst.expectedError, err)
 			default:
 				for path, expected := range tst.expected {
-					result, err := os.ReadFile(path)
+					result, err := os.ReadFile(path) //nolint: gosec // File was created in this test
 					if err != nil {
 						t.Errorf("Failed to open file: %v", err)
 						break
