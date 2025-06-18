@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/memes/f5xc/compare/v1.3.0...v1.3.1) (2025-06-18)
+
+
+### Bug Fixes
+
+* Add error checking to deferred functions ([13050d7](https://github.com/memes/f5xc/commit/13050d722a06c87c8ff95ce824aded00a6b74532))
+* Update CA certificates bundle in container ([dc49036](https://github.com/memes/f5xc/commit/dc4903684d62ea8cf90c0134f0e18ee0bf5967f0))
+
 ## [1.3.0](https://github.com/memes/f5xc/compare/v1.2.2...v1.3.0) (2025-03-19)
 
 
