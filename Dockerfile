@@ -1,5 +1,6 @@
-FROM alpine:3.22.1 as ca
-RUN apk --no-cache add ca-certificates-bundle=20241121-r2
+# syntax=docker/dockerfile:1
+FROM alpine:3.22.1 AS ca
+RUN apk --no-cache add ca-certificates-bundle=20250619-r0
 
 FROM scratch
 COPY --from=ca /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
