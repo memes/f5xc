@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Release Please
         id: release-please
-        uses: GoogleCloudPlatform/release-please-action@v4.2.0
+        uses: GoogleCloudPlatform/release-please-action@v4.3.0
         with:
           release-type: go
           package-name: f5xc
