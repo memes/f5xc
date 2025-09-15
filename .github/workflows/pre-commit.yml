@@ -26,7 +26,7 @@ jobs:
         run: |
           sudo curl -fsSLo /usr/local/bin/talisman https://github.com/thoughtworks/talisman/releases/download/v${{ env.TALISMAN_VERSION }}/talisman_linux_amd64
           sudo chmod 0755 /usr/local/bin/talisman
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - uses: pre-commit/action@v3.0.1
