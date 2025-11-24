@@ -21,7 +21,7 @@ jobs:
     env:
       TALISMAN_VERSION: 1.37.0
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install talisman
         run: |
           sudo curl -fsSLo /usr/local/bin/talisman https://github.com/thoughtworks/talisman/releases/download/v${{ env.TALISMAN_VERSION }}/talisman_linux_amd64
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Execute hadolint
         uses: hadolint/hadolint-action@v3.3.0
         with:

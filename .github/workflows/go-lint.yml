@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup go
         uses: actions/setup-go@v6
         with:
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Setup go
         uses: actions/setup-go@v6
         with:
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Download vesctl
         run: |
           curl -sfL https://vesio.azureedge.net/releases/vesctl/0.2.47/vesctl.linux-amd64.gz | sudo zcat > /usr/local/bin/vesctl
