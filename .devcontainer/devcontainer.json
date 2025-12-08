@@ -28,6 +28,6 @@
     "pre-commit": "sudo sh -c 'apt update && apt install -y --no-install-recommends pipx && rm -rf /var/lib/apt/lists/*' && pipx install pre-commit && pre-commit install --hook-type commit-msg --hook-type pre-commit"
   },
   "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.volterra,target=/home/vscode/.volterra,type=bind"
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.volterra,target=/home/vscode/.volterra,type=bind,consistency=cached"
   ]
 }
