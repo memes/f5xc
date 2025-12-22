@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/memes/f5xc/compare/v1.3.2...v1.3.3) (2025-12-22)
+
+
+### Bug Fixes
+
+* Update CA Certificate bundle ([478d37c](https://github.com/memes/f5xc/commit/478d37c98bbb54f67d2fe79fbbe34ec860e122c8))
+
 ## [1.3.2](https://github.com/memes/f5xc/compare/v1.3.1...v1.3.2) (2025-07-30)
 
 
