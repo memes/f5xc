@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM alpine:3.23.0 AS ca
+FROM alpine:3.23.2 AS ca
 RUN apk --no-cache add ca-certificates-bundle=20251003-r0
 
 FROM scratch
