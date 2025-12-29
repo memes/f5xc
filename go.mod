@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	go.uber.org/goleak v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
-	software.sslmate.com/src/go-pkcs12 v0.6.0
+	software.sslmate.com/src/go-pkcs12 v0.7.0
 )
 
 require (
